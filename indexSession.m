@@ -2,7 +2,7 @@ function [deb, fin] = indexSession(az)
     %les indications de début et de fin de session sont marquées par le
     %secouement du drone. Ainsi des valeurs d'accélérations verticales (az)
     %suppérieur à 0 témoignent du début ou de la fin de d'une session de test.
-    %Les débuts sont indentifiables par les données stables qui les suives, les
+    %Les débuts sont indentifiables par les données stables qui les suivent, les
     %fins sont marquées par un début successif non éloigné, ou la fin des
     %données
 
@@ -34,7 +34,7 @@ function [deb, fin] = indexSession(az)
                     else
                         boolDeb = true;%on reset notre flag
                     end;
-                elseif(length(deb) > length(fin))%on recherche une fin
+                elseif(length(deb) > length(fin) & i > deb(end) + secSess )%on recherche une fin
                     if az(i) > valSec | az(i) < valBasSec%si on est sur une secousse
                         fin = [fin, i];% on ajoute cette valeur en tant que fin de session
                     end;
