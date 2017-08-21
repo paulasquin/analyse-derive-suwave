@@ -11,7 +11,6 @@ function [lat, lon, az, wind, compasX, compasY] = logsTreatment(logName)
     wind = [];
     compasX = [];
     compasY = [];
-    vitesseMoy = [];
     
     for i = 1:nLogs
         nom = names{i};%récupération du nom en str
@@ -28,9 +27,8 @@ function [lat, lon, az, wind, compasX, compasY] = logsTreatment(logName)
                 wind = [wind', airspeed(:,3)']';
             else
                 wind = zeros(1, length(az));
+                disp('Pas de données vent');
             end;
-        
-            batt = csvread([logName, '\', nom,'_battery_status_0.csv'],1,0);
             
             gpsTime_raw = [gpsTime_raw', gps(:,2)'-14.4*10^9 ]';%Concaténation des colonnes avec les nouvelles données
 
