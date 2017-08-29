@@ -7,7 +7,7 @@ function [] = afficher(lat, lon, az, ventFiltre, vitessesMoy, compasX, compasY, 
     plot(lon(end), lat(end), '-s','MarkerSize',10,'MarkerEdgeColor','blue', 'MarkerFaceColor',[1 .6 .6]);
     plot_google_map('MapType', 'satellite');
     
-    %quiver(lon,lat,compasX,compasY);%Affichage des vents, pas pertinent
+    quiver(lon,lat,compasX,compasY);%Affichage des vents, pas pertinent
     %pour le moment, les données ne sont pas facilement exploitable
     
     figure('Name',['Accel Z pour session ' int2str(num)]);

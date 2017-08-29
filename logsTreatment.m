@@ -1,7 +1,6 @@
-function [lat, lon, az, wind, compasX, compasY] = logsTreatment(logName)
+function [lat, lon, az, wind, compasX, compasY] = logsTreatment(logName, setComp)
     names = convertLogs(logName);%Récupération des noms de fichier log exploitable
     nLogs = length(names);
-    
     gpsTime_raw = [];
     lat  = [];
     lon  = [];
@@ -41,4 +40,17 @@ function [lat, lon, az, wind, compasX, compasY] = logsTreatment(logName)
         end;
         gpsTime = datevec(datenum(1970,1,1)+gpsTime_raw/1000000/86400);%Récupération du temps au format classique à partir du brut gps
     end;%fin récupération et concaténation des données
+    %Application de la calibration sur les données compas
+    for i=1:length(compasX)
+        compasX(i) = (compasX(i)+setComp(1))*setComp(2);
+        compasY(i) = (compasY(i)+setComp(3))*setComp(4);
+    end;
+    for i=1:length(lat)
+        if lat(i) == 0 & i < length(lat)
+            lat(i) = lat(i+1);
+        end;
+        if lon(i) == 0 & i < length(lon)
+            lon(i) = lon(i+1);
+        end;
+    end;
 end

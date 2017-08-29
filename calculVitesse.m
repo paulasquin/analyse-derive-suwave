@@ -16,7 +16,7 @@ function [vitessesMoy, vitessesNonFiltre] = calculVitesseMoy(lat, lon, moy)
 %             vitessesMoy = [vitessesMoy, mean(sousVitesses)];%Ajout du moyennage des vitesses de la sous longueur
 %         end;
         
-        vitessesMoy = [vitessesMoy, filtrage(sousVitesses, 0.005)];
+        vitessesMoy = [vitessesMoy, filtrage(sousVitesses, 0.05)];
         vitessesNonFiltre = [vitessesNonFiltre, sousVitesses];
     end;
 end

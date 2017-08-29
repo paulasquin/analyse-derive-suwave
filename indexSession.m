@@ -6,14 +6,14 @@ function [deb, fin] = indexSession(az)
     %fins sont marquées par un début successif non éloigné, ou la fin des
     %données
 
-    secSess = 300;%On considère qu'une session de log est constitué d'au moins
+    secSess = 2000;%On considère qu'une session de log est constitué d'au moins
     %5 minutes de données calmes.
     i = 1;
     iMax = length(az);
     deb = [];
     fin = [];
     boolDeb = true;
-    valSec = 0;%Valeurs au delà et en dessous de laquelle on défini une secousse
+    valSec = 5;%Valeurs au delà et en dessous de laquelle on défini une secousse
     valBasSec = -15;
     
     while i < iMax
@@ -35,7 +35,7 @@ function [deb, fin] = indexSession(az)
                         boolDeb = true;%on reset notre flag
                     end;
                 elseif(length(deb) > length(fin) & i > deb(end) + secSess )%on recherche une fin
-                    if az(i) > valSec | az(i) < valBasSec%si on est sur une secousse
+                    if (az(i) > valSec | az(i) < valBasSec) & i > deb(end) + secSess%si on est sur une secousse
                         fin = [fin, i];% on ajoute cette valeur en tant que fin de session
                     end;
                 end;%fin recherche début ou fin avant fin fichier
