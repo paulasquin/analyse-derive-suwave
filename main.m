@@ -1,6 +1,6 @@
 clear; close all; clc;
 
-logName = 'deriveDrone_4_Standard_2017-08-29-pm';%Nom du dossier où se trouvent les fichier .ulg à étudier
+logName = 'deriveDrone_2_Standard_2017-08-16-pm';%Nom du dossier où se trouvent les fichier .ulg à étudier
 ventWindFinder = 6;
 moyVit = 50;%Nombre de valeurs sur lesquelles sont moyennés la vitesse de déplacement GPS
 moyVent = 50;

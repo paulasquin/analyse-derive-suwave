@@ -12,6 +12,7 @@ function [lat, lon, az, wind, compasX, compasY] = logsTreatment(logName, setComp
     compasY = [];
     yawTime = [];
     yaw = [];
+    pasDonneesVents = false;
     
     for i = 1:nLogs
         nom = names{i};%récupération du nom en str
@@ -22,13 +23,14 @@ function [lat, lon, az, wind, compasX, compasY] = logsTreatment(logName, setComp
             sensorsTime = [sensorsTime', sensors(:,1)']';
             az = [az', sensors(:,9)']';
             
-            if exist([logName, '\', nom,'_airspeed_0.csv'], 'file')==2
+            if pasDonneesVents == false & exist([logName, '\', nom,'_airspeed_0.csv'], 'file')==2
                 airspeed = csvread([logName, '\', nom,'_airspeed_0.csv'],1,0);
                 airspeedTime = [airspeedTime', airspeed(:,1)']';
                 wind = [wind', airspeed(:,3)']';
             else
                 wind = zeros(1, length(az));
                 disp('Pas de données vent');
+                pasDonneeVents = true;
             end;
             
             compasX = [compasX', sensors(:,12)']';
