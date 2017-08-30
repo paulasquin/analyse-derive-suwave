@@ -4,7 +4,7 @@ logName = 'deriveDrone_4_Standard_2017-08-29-pm';%Nom du dossier où se trouvent 
 ventWindFinder = 6;
 moyVit = 50;%Nombre de valeurs sur lesquelles sont moyennés la vitesse de déplacement GPS
 moyVent = 50;
-setComp = [0.552, 0.998, 0.141, 0.916];
+setComp = [0.552, 0.998, 0.141, 0.916];%Offset du magnétomètre, à utiliser pour exploitation anciennes données
 
 [lat, lon, az, wind, compasX, compasY] = logsTreatment(logName, setComp);
 [deb, fin] = indexSession(az);
@@ -14,6 +14,7 @@ disp(deb);
 disp('indexs de fin : ');
 disp(fin);
 
+figure('Name','Az général');
 plot(1:length(az), az);
 
 

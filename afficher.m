@@ -7,11 +7,18 @@ function [] = afficher(lat, lon, az, ventFiltre, vitessesMoy, compasX, compasY, 
     plot(lon(end), lat(end), '-s','MarkerSize',10,'MarkerEdgeColor','blue', 'MarkerFaceColor',[1 .6 .6]);
     plot_google_map('MapType', 'satellite');
     
+    disp(length(lat));
+    disp(length(compasY));
+    
+    
     quiver(lon,lat,compasX,compasY);%Affichage des vents, pas pertinent
     %pour le moment, les données ne sont pas facilement exploitable
     
     figure('Name',['Accel Z pour session ' int2str(num)]);
     plot(1:length(az), az);
+    
+    gigaMoy = mean(vitessesMoy);
+    fprintf(['Vitesse moyenne pour session ' int2str(num) ' est ' num2str(gigaMoy) '\n']);
     
     if length(ventFiltre) == 0
         fprintf(['\nPas de vent non nul pour session ' int2str(num) '\n']);
@@ -26,18 +33,24 @@ function [] = afficher(lat, lon, az, ventFiltre, vitessesMoy, compasX, compasY, 
         plot(1:length(ventTresFiltre), ventTresFiltre, 'g', 'linewidth', 2);
         moyVentTresFiltre = mean(ventTresFiltre);
         fprintf(['\nVent moyen très filtré pour session ' int2str(num) ' est ' num2str(moyVentTresFiltre) '\n']);
+        
+        for i=1:length(ventTresFiltre)
+            coefsVentsPitot(i) = vitessesMoy(i)/ventTresFiltre(i);
+        end;
+        
+        figure('Name', [ 'Coefs des vitesses Deplacement/Pitot pour session' int2str(num) ] );
+        plot(1:length(coefsVentsPitot), coefsVentsPitot);
+        
+        moyCoefsVentsPitot = mean(coefsVentsPitot);
+        fprintf(['Le coefficient des vitesses moyen à partir de Pitot pour la session ' int2str(num) ' est ' num2str( moyCoefsVentsPitot ) '\n']);
     end;
-    
-    
     
     figure('Name',['Vitesses pour session ' int2str(num)]);
     plot(1:length(vitessesNonFiltre), vitessesNonFiltre);
     hold on;
     plot(1:length(vitessesMoy), vitessesMoy, 'r', 'linewidth', 2);
-    gigaMoy = mean(vitessesMoy);
-    coefVents = gigaMoy / ventWindFinder;
-    %fprintf([num2str(ventWindFinder) ' \n' ]);
-    fprintf(['Vitesse moyenne pour session ' int2str(num) ' est ' num2str(gigaMoy) '\n']);
-    fprintf(['Le coefficient des vents pour session ' int2str(num) ' est ' num2str( coefVents ) '\n']);
+    
+    coefVentsWindfinder = gigaMoy / ventWindFinder;
+    fprintf(['Le coefficient des vitesses à partir de Windfinder pour la session ' int2str(num) ' est ' num2str( coefVentsWindfinder ) '\n']);
 
 end

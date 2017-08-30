@@ -10,6 +10,8 @@ function [lat, lon, az, wind, compasX, compasY] = logsTreatment(logName, setComp
     wind = [];
     compasX = [];
     compasY = [];
+    yawTime = [];
+    yaw = [];
     
     for i = 1:nLogs
         nom = names{i};%récupération du nom en str
@@ -29,15 +31,24 @@ function [lat, lon, az, wind, compasX, compasY] = logsTreatment(logName, setComp
                 disp('Pas de données vent');
             end;
             
+            compasX = [compasX', sensors(:,12)']';
+            compasY = [compasY', sensors(:,13)']';
+            
+            if exist([logName, '\', nom,'_vehicle_local_position_0.csv'], 'file')==2
+                local_position = csvread([logName, '\', nom,'_vehicle_local_position_0.csv'],1,0);
+                yawTime = [yawTime', local_position(:,1)']';
+                yaw = [yaw', local_position(:,22)']';
+            else
+                wind = zeros(1, length(az));
+                disp('Pas de données vent');
+            end;
+            
             gpsTime_raw = [gpsTime_raw', gps(:,2)'-14.4*10^9 ]';%Concaténation des colonnes avec les nouvelles données
 
             lat = [lat', gps(:,3)'/10^7]';%Différenciation entre décimales et entiers de la donnée GPS
             lon = [lon', gps(:,4)'/10^7]';
-            
-            compasX = [compasX', sensors(:,12)']';
-            compasY = [compasY', sensors(:,13)']';
-            
         end;
+        
         gpsTime = datevec(datenum(1970,1,1)+gpsTime_raw/1000000/86400);%Récupération du temps au format classique à partir du brut gps
     end;%fin récupération et concaténation des données
     %Application de la calibration sur les données compas
@@ -52,5 +63,16 @@ function [lat, lon, az, wind, compasX, compasY] = logsTreatment(logName, setComp
         if lon(i) == 0 & i < length(lon)
             lon(i) = lon(i+1);
         end;
+    end;
+    if length(yaw) ~= 0
+        disp(yaw);
+        compasX = [];
+        compasY = [];
+        for i=1:length(yaw)
+            compasY(i) = cos(yaw(i));
+            compasX(i) = sin(yaw(i));
+        end;
+        compasX = compasX';
+        compasY = compasY';
     end;
 end
